@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cornucopia</title>
+    <style>
+        body { margin: 0; 
+        background-color: black; 
+        display: flex; 
+        justify-content: center; 
+        align-items: center; 
+        height: 100vh;
+        margin: 0; 
+        outline: none;
+        background: #000;
+        -webkit-tap-highlight-color: transparent;
+        }
+        canvas { display: block; }
+        #infoButton {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 20px;
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .info-popup {
+            display: none;
+            position: absolute;
+            top: 40px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            width: 300px;
+            text-align: left;
+            user-select: none;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <button id="infoButton">&#9432;</button>
+    <div class="info-popup" id="infoPopup">
+        <p style="text-align:center;" ><strong>Cornucopia</strong></p>
+    <p style="color:pink; text-align: center;">The "Cornucopia" in the code is a 3D parametric surface, inspired by the mathematical visualization of a horn-like shape. It resembles the "Horn of Plenty", which is a symbol of abundance in Greek mythology. The surface expands as it spirals outward, creating an aesthetically pleasing geometric form.</p>
+            <p style="text-align:center;">For Equations visit my Github. Enjoy!</p>
+    </div>
+    <script>
+         // Scene setup
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(95, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Add space background with glittering stars
+        const starGeometry = new THREE.BufferGeometry();
+        const starCount = 500;
+        const starPositions = new Float32Array(starCount * 3);
+        const starColors = new Float32Array(starCount * 3);
+
+        for (let i = 0; i < starCount; i++) {
+            starPositions[i * 3] = (Math.random() - 0.5) * 50;
+            starPositions[i * 3 + 1] = (Math.random() - 0.5) * 50;
+            starPositions[i * 3 + 2] = (Math.random() - 0.5) * 50;
+            
+            starColors[i * 3] = Math.random();
+            starColors[i * 3 + 1] = Math.random();
+            starColors[i * 3 + 2] = Math.random();
+        }
+
+        starGeometry.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
+        starGeometry.setAttribute('color', new THREE.BufferAttribute(starColors, 3));
+
+        const starMaterial = new THREE.PointsMaterial({ size: 0.07, vertexColors: true });
+        const stars = new THREE.Points(starGeometry, starMaterial);
+        scene.add(stars);
+
+        // Cornucopia parameters
+        const a = 0.5;
+        const b = 0.3;
+        const geometry = new THREE.ParametricGeometry((u, v, target) => {
+            u = u * Math.PI; // u ranges from -π to π
+            v = v * 2 * Math.PI; // v ranges from 0 to 2π
+            const x = 0.3 * (Math.exp(b * v) * Math.cos(v) + Math.exp(a * v) * Math.cos(u) * Math.cos(v));
+            const y = 0.3 * (Math.exp(b * v) * Math.sin(v) + Math.exp(a * v) * Math.cos(u) * Math.sin(v));
+            const z = 0.3 * Math.exp(a * v) * Math.sin(u);
+            target.set(x, y, z);
+        }, 100, 100);
+
+        // Create rainbow effect
+        let hue = 0;
+        function getRainbowColor() {
+            hue += 0.5;
+            if (hue > 360) hue = 0;
+            return new THREE.Color(`hsl(${hue}, 100%, 50%)`);
+        }
+
+        const material = new THREE.MeshBasicMaterial({ wireframe: true });
+        const cornucopia = new THREE.Mesh(geometry, material);
+        scene.add(cornucopia);
+
+        // Camera position at center
+        camera.position.set(0, 0, 18);
+
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+            cornucopia.rotation.y += 0.01; // Rotate around the Y-axis
+            material.color = getRainbowColor(); // Update color dynamically
+            
+            // Make stars twinkle
+            for (let i = 0; i < starColors.length; i++) {
+                starColors[i] = Math.random();
+            }
+            starGeometry.attributes.color.needsUpdate = true;
+            
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+            renderer.setSize(width, height);
+            camera.aspect = width / height;
+            camera.updateProjectionMatrix();
+        });
+        
+        $("#infoButton").click(function() {
+            $("#infoPopup").fadeToggle();
+        });
+    </script>
+</body>
+  </html>
+  

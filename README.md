@@ -10,19 +10,12 @@ In this case, the Cornucopia is visualized using **THREE.js** with a wireframe e
 ### **Understanding the Equation in the Code**
 The parametric equations used in the code define a 3D surface using two parameters, **\( u \)** and **\( v \)**, which control the shape.
 
-\[
-x = e^{bv} \cos(v) + e^{av} \cos(u) \cos(v)
-\]
-\[
-y = e^{bv} \sin(v) + e^{av} \cos(u) \sin(v)
-\]
-\[
-z = e^{av} \sin(u)
-\]
+![Image](https://github.com/user-attachments/assets/8a4e2bbe-97c6-463c-b4da-cf9e1233ffed)
 
 #### **Breaking Down the Equations:**
 1. **Exponential Growth:**  
-   - The terms \( e^{bv} \) and \( e^{av} \) cause the shape to expand as \( v \) increases, making the structure grow outward.
+
+![Image](https://github.com/user-attachments/assets/c9d1e2f9-1d51-4f33-a940-157232cff97b)
    
 2. **Rotation (Spiraling Effect):**  
    - The sine **(sin)** and cosine **(cos)** terms introduce rotation, making the surface twist as it extends.

@@ -32,7 +32,3 @@ The parametric equations used in the code define a 3D surface using two paramete
 - The exponential terms make the surface **widen** as it extends outward.
 - The sine and cosine terms create a **twisting spiral effect**.
 - The structure starts narrow at the center and gradually **expands outward**, resembling a horn.
-
-This shape is often used in **mathematical art and 3D modeling** to create mesmerizing visualizations.
-
-Let me know if you need further clarifications! 😊
